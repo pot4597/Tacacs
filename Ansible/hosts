@@ -1,2 +1,4 @@
-[center]
+[L3]
 1.1.1.1 ansible_port=2222 ansible_ssh_host=1.1.1.1 ##L3##
+[Wireless]
+2.2.2.2 ansible_port=2222 ansible_ssh_host=2.2.2.2 ##Wireless##
