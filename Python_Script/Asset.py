@@ -5,14 +5,14 @@ import datetime
 
 try :
         #자산 Postgres db서버 연결
-        conn_postgres =  psycopg2.connect(host="172.21.0.136", dbname='yfpmcer', user="dba", password="!Dell1234", port="5432")
+        conn_postgres =  psycopg2.connect(host="1.1.1.1", dbname='***', user="***", password="***", port="***")
         cursor_postgres = conn_postgres.cursor()
 
         #자산 Postgres db서버 접속후 데이터 select
         cursor_postgres.execute("select *  from mac_info where jasan_b not in ('모니터','스캐너')")
 
         #로컬 Mysql서버 연결
-        conn_mysql = pymysql.connect(host='127.0.0.1', user='root', password='Dell@1234',db='device_info', charset='utf8')
+        conn_mysql = pymysql.connect(host='127.0.0.1', user='***', password='***',db='***', charset='utf8')
         cursor_mysql = conn_mysql.cursor()
 
         #로컬 Mysql서버 접속후 데이터 전체 삭제
