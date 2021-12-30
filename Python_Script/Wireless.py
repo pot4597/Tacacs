@@ -2,19 +2,17 @@ import pymssql
 import pymysql
 import psycopg2
 import datetime
-#import date
+
 try :
         #postgres db서버 연결
-        conn_postgres =  psycopg2.connect(host="172.21.0.136", dbname='yfpmcer', user="dba", password="!Dell1234", port="5432")
+        conn_postgres =  psycopg2.connect(host="***", dbname='***', user="***", password="***", port="***")
         cursor_postgres = conn_postgres.cursor()
         #mssql서버 접속후 데이터 select
         cursor_postgres.execute("select jasan_no, mac_no, ssid from as_manage")
 
 
-
-
         #mysql서버 연결
-        conn_mysql = pymysql.connect(host='127.0.0.1', user='root', password='Dell@1234',db='device_info', charset='utf8')
+        conn_mysql = pymysql.connect(host='127.0.0.1', user='***', password='***',db='***', charset='utf8')
         cursor_mysql = conn_mysql.cursor()
         #mysql서버 접속후 데이터 전체 삭제
         cursor_mysql.execute("delete from wireless")
@@ -34,7 +32,6 @@ try :
             val = (row_jasan[0], row_jasan[1], row_jasan[2], i)
             row_jasan = cursor_postgres.fetchone()
             curs.execute(sql, val)
-
 
 
         conn_postgres.commit()
