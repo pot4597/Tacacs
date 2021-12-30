@@ -4,7 +4,7 @@ import datetime
 
 try :
         #시만텍 Mssql서버 연결
-        conn_symantec =  pymssql.connect(server="172.21.0.122" , user="sem5", password="Symantec1", database="sem5office")
+        conn_symantec =  pymssql.connect(server="***" , user="***", password="***", database="***")
         cursor_symantec = conn_symantec.cursor()
 
         #시만텍 Mssql서버 접속후 데이터 select
@@ -45,7 +45,7 @@ where sa.deleted='0' and I.DELETED = 0 order by group_name, i.COMPUTER_name;
 """)
 
         #로컬 Mysql서버 연결
-        conn_mysql = pymysql.connect(host='127.0.0.1', user='root', password='Dell@1234',db='device_info', charset='utf8')
+        conn_mysql = pymysql.connect(host='127.0.0.1', user='root', password='***',db='***', charset='utf8')
         cursor_mysql = conn_mysql.cursor()
 
         #로컬 mysql서버 접속후 데이터 전체 삭제
