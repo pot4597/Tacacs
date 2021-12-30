@@ -3,14 +3,14 @@ import pymysql
 import datetime
 try :
         #Gradius Mssql서버 연결
-        conn =  pymssql.connect(server="172.21.0.49" , user="root", password="gradius6!", database="gradius")
+        conn =  pymssql.connect(server="****" , user="***", password="***", database="***")
         cursor = conn.cursor()
 
         #Mssql서버 접속후 데이터 select
         cursor.execute("select distinct d.name, a.username, a.currentipaddr, a.version, a.state, l.name, replace(lower(i.macaddr), ':', '')as macaddr,h.cpu, h.memory, h.systemmodel, h.mainboard, i.policyrecivetime from agent as a left join dept as d on a.deptid = d.id left join level as l on a.currentlevelid = l.id left join agent_hw as h on a.id = h.agentid  left join agent_info as i on a.id = i.id where i.macaddr is not NULL and d.name != '(퇴사자)' and i.policyrecivetime >= DATEADD(day,-14,getdate());")
 
         #로컬 Mysql서버 연결
-        conn_mysql = pymysql.connect(host='127.0.0.1', user='root', password='Dell@1234',db='device_info', charset='utf8')
+        conn_mysql = pymysql.connect(host='127.0.0.1', user='***', password='***',db='***', charset='utf8')
         cursor_mysql = conn_mysql.cursor()
 
         #로컬 Mysql서버 접속후 데이터 전체 삭제
@@ -80,18 +80,15 @@ try :
         conn_mysql.close()
 
 
-
-
-
         #Gradius Mssql서버 연결
-        conn =  pymysql.connect(host="172.17.230.241",port=3307, user="root", password="gradius7",database="gradius", charset='utf8')
+        conn =  pymysql.connect(host="***",port=***, user="***", password="***",database="***", charset='utf8')
         cursor = conn.cursor()
 
         #Mssql서버 접속후 데이터 select
         cursor.execute("select distinct d.name, a.username, a.currentipaddr, a.version, a.state, l.name, replace(lower(i.macaddr), ':', '')as macaddr,h.cpu, h.memory, h.systemmodel, h.mainboard, i.policyrecivetime from agent as a left join dept as d on a.deptid = d.id left join level as l on a.currentlevelid = l.id left join agent_hw as h on a.id = h.agentid  left join agent_info as i on a.id = i.id where d.name != '(퇴사자)' and i.policyrecivetime >= DATE_ADD(NOW(),INTERVAL -7 day);")
 
         #로컬 Mysql서버 연결
-        conn_mysql = pymysql.connect(host='127.0.0.1', user='root', password='Dell@1234',db='device_info', charset='utf8')
+        conn_mysql = pymysql.connect(host='127.0.0.1', user='***', password='***',db='***', charset='utf8')
         cursor_mysql = conn_mysql.cursor()
 
         #로컬 Mysql서버 접속후 데이터 전체 삭제
