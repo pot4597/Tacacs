@@ -1,6 +1,6 @@
 ---
 - name: Backup Device Status
-  hosts: wireless 
+  hosts: hosts
   gather_facts: no
   tasks:
 
