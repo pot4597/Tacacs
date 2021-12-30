@@ -5,7 +5,7 @@ import datetime
 
 try :
         #자산 Postgres db서버 연결
-        conn_postgres =  psycopg2.connect(host="1.1.1.1", dbname='***', user="***", password="***", port="***")
+        conn_postgres =  psycopg2.connect(host="1.1.1.1", dbname='***', user="***", password="***", port="****")
         cursor_postgres = conn_postgres.cursor()
 
         #자산 Postgres db서버 접속후 데이터 select
