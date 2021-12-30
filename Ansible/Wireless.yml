@@ -1,0 +1,59 @@
+---
+- name: Backup Device Status
+  hosts: wireless 
+  gather_facts: no
+  tasks:
+
+   - name: Authentication
+     include_vars: /etc/ansible/playbooks/group_vars/wireless.yml
+
+   - name: Make Directory
+     local_action:
+       module: file
+       path: /etc/ansible/cisco/korea/arp/temp
+       state: directory
+       mode: u=rwX,g=rX,o=rX
+     register: backup
+     ignore_errors: True
+
+
+   - name: Running Configuration
+     aireos_command:
+       commands:
+         - config paging disable
+         - show arp switch
+     register: wireless_output
+
+
+   - name: show arp
+     copy:
+       content="{{ wireless_output.stdout[1] }}"
+       dest="/etc/ansible/cisco/korea/arp/temp/{{ ansible_host }}.txt"
+
+   - name: Parsing the file
+     shell: "cat /etc/ansible/cisco/korea/arp/temp/{{ ansible_host }}.txt | sed -e '1,4d' -e 's/$/ {{ ansible_host }}/g'"
+     register: parsing_data
+     ignore_errors: True
+
+
+   - name: save arp file
+     copy:
+       content="{{ parsing_data.stdout }}"
+       dest="/etc/ansible/cisco/korea/arp/wireless/{{ ansible_host }}.txt"
+
+   - name: Assemble from fragments from a directory
+     assemble:
+       src: "/etc/ansible/cisco/korea/arp/wireless/"
+       dest: "/etc/ansible/cisco/korea/arp/wireless_arp_info.txt"
+     ignore_errors: True
+
+   - name: parsing ip and mac
+     shell: cat /etc/ansible/cisco/korea/arp/wireless_arp_info.txt |  sed '/Host/d' | awk '{d=tolower($1); print $2,d,$6}' | awk '{gsub(":","");print}'
+     register: wireless_arp
+     ignore_errors: True
+
+   - name: Wireless arp summary
+     copy:
+       content="{{ wireless_arp.stdout }}"
+       dest="/etc/ansible/cisco/korea/arp/wireless_arp_summary.csv"
+     ignore_errors: True

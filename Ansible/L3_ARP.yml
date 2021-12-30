@@ -1,0 +1,131 @@
+---
+- name: Only Supported Telnet Device
+  hosts: telnet
+  gather_facts: false
+  connection: local
+  tasks:
+   - name: Make Directory
+     local_action:
+       module: file
+       path: /etc/ansible/cisco/korea/arp/L3/
+       state: directory
+       mode: u=rwX,g=rX,o=rX
+     register: backup
+     ignore_errors: True
+
+   - name: Run Show Command
+     telnet:
+       user: ****
+       password: ****
+       login_prompt: "Username: "
+       prompts:
+         - '[>|#]'
+       command:
+         - terminal length 0
+         - show ip arp
+     register: telnet_output
+     ignore_errors: True
+
+   - name: telnet_ouput save 
+     copy:
+       content: "{{ telnet_output.output[1] }}"
+       dest: "/etc/ansible/cisco/korea/arp/L3/{{ ansible_host }}.txt"
+     ignore_errors: True
+
+   - name: L3 Device IP ADD
+     replace:
+       dest: "/etc/ansible/cisco/korea/arp/L3/{{ ansible_host }}.txt"
+       regexp: '(Internet.*)$'
+       replace: '\1  {{ansible_host }}'
+     ignore_errors: True
+  tags:
+   - telnet_arp
+
+- name: Supported SSH Device
+  hosts: l3
+  gather_facts: no
+  tasks:
+   - name: Rus Show Command
+     ios_command:
+       commands:
+         - show ip arp
+     register: ssh_output
+     ignore_errors: True
+
+   - name: ssh_output asve
+     copy:
+       content: "{{ ssh_output.stdout[0] }}"
+       dest: "/etc/ansible/cisco/korea/arp/L3/{{ ansible_host }}.txt"
+     ignore_errors: True
+
+   - name: L3 Device IP ADD
+     replace:
+       dest: "/etc/ansible/cisco/korea/arp/L3/{{ ansible_host }}.txt"
+       regexp: '(Internet.*)$'
+       replace: '\1  {{ansible_host }}'
+     ignore_errors: True       
+
+   - name: Assemble from fragments from a directory
+     assemble:
+       src: "/etc/ansible/cisco/korea/arp/L3"
+       dest: "/etc/ansible/cisco/korea/arp/arp_info.txt"
+     ignore_errors: True
+
+   - name: Parsing the file
+     shell: "cat /etc/ansible/cisco/korea/arp/arp_info.txt | sed -e '/Protocol/d' | sed -e '/show/d' | sed -e '/YR_L3S/d'  | awk '{print $2, $4, $7}'"
+     register: arp_info
+     ignore_errors: True
+
+   - name: Save ARP Summary
+     copy:
+       content="{{ arp_info.stdout }}"
+       dest="/etc/ansible/cisco/korea/arp/arp_summary.csv"
+     ignore_errors: True
+  tags:
+   - l3_arp
+
+- name: Supported NXOS Device
+  hosts: ip
+  gather_facts: no
+
+  tasks:
+   - name: Make Directory
+     local_action:
+       module: file
+       path: /etc/ansible/cisco/korea/arp/nxos/
+       state: directory
+       mode: u=rwX,g=rX,o=rX
+     register: backup
+     ignore_errors: True
+
+   - name: Run Show Command
+     cisco.nxos.nxos_command:
+       commands:
+         - terminal length 0
+         - show ip arp
+     register: nxos
+     ignore_errors: True
+
+   - name: nxos save
+     copy:
+       content: "{{ nxos.stdout[1] }}"
+       dest: "/etc/ansible/cisco/korea/arp/nxos/1.1.1.1.txt"
+     ignore_errors: True
+
+   - name: Parsing the file
+     shell: "sed -i 's/$/ {{ ansible_host }}/g' /etc/ansible/cisco/korea/arp/nxos/1.1.1.1.txt"
+     ignore_errors: True
+
+
+   - name: parsing ip and mac
+     shell: cat /etc/ansible/cisco/korea/arp/nxos/1.1.1.1.txt | sed '1,8d' | awk '{d=tolower($1); print d,$3,$5}' | awk '{gsub(":","");print}'
+     register: server
+     ignore_errors: True
+
+   - name: Server arp summary
+     copy:
+       content="{{ server.stdout }}"
+       dest="/etc/ansible/cisco/korea/arp/server_arp_summary.csv"
+     ignore_errors: True
+  tags:
+   - nxos_arp
