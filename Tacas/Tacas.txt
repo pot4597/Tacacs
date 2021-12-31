@@ -1,0 +1,240 @@
+key = "TEST"
+accounting file = /var/log/tacacs/accounting/tac.acct
+acl = default {
+                permit = 1\.1         ##허용 IP
+}
+
+##그룹 권한
+group = test {
+        acl = default
+        service = exec {
+                priv-lvl = 15
+        }
+        #####Cisco WLC Config####
+        service = ciscowlc {
+        role1 = ALL
+        }
+        #########################
+
+        ####Juniper FW Config####
+        service = netscreen {
+        vsys = root
+        privilege = root
+        }
+        #########################
+
+        cmd = ping {
+                permit .*
+        }
+
+        cmd = write {
+                permit .*
+        }
+
+        cmd = username {
+                permit .*
+        }
+
+        cmd = enable {
+                permit .*
+        }
+
+        cmd = show {
+                permit .*
+        }
+
+        cmd = exit {
+                permit .*
+        }
+
+        cmd = configure {
+                permit .*
+        }
+
+        cmd = interface {
+                permit .*
+        }
+
+        cmd = switchport  {
+                permit .*
+        }
+
+        cmd = description {
+                permit .*
+        }
+
+        cmd = clock {
+                permit .*
+        }
+
+        cmd = copy {
+                permit .*
+        }
+
+        cmd = debug {
+                permit .*
+        }
+
+        cmd = no {
+                permit .*
+        }
+
+        cmd = delete {
+                permit .*
+        }
+
+        cmd = dir {
+                permit .*
+        }
+
+        cmd = diable {
+                permit .*
+        }
+
+        cmd = erase {
+                permit .*
+        }
+
+        cmd = mkdir {
+                permit .*
+        }
+
+        cmd = monitor {
+                permit .*
+        }
+
+        cmd = release {
+                permit .*
+        }
+
+        cmd = reload {
+                permit .*
+        }
+
+        cmd = rename {
+                permit .*
+        }
+
+        cmd = ssh {
+                permit .*
+        }
+
+        cmd = telnet {
+                permit .*
+        }
+
+        cmd = terminal {
+                permit .*
+        }
+
+        cmd = undebug {
+                permit .*
+        }
+
+        cmd = remote {
+                permit .*
+        }
+
+        cmd = traceroute {
+                permit .*
+        }
+        cmd = do {
+                permit .*
+        }
+        cmd = clear {
+                permit .*
+        }
+        cmd = get {
+                permit .*
+        }
+}
+
+group = adminop {
+        acl = default
+        service = exec {
+                priv-lvl = 15
+        }
+        #####Cisco WLC Config####
+        service = ciscowlc {
+        role1 = ALL
+        }
+        #########################
+
+        ####Juniper FW Config####
+        service = netscreen {
+        vsys = root
+        privilege = root
+        }
+        #########################
+
+
+        cmd = ping {
+                permit .*
+        }
+
+        cmd = show {
+                permit .*
+        }
+
+        cmd = exit {
+                permit .*
+        }
+
+        cmd = clock {
+                permit .*
+        }
+
+        cmd = debug {
+                permit .*
+        }
+
+        cmd = dir {
+                permit .*
+        }
+
+        cmd = monitor {
+                permit .*
+        }
+
+        cmd = ssh {
+                permit .*
+        }
+
+        cmd = telnet {
+                permit .*
+        }
+        cmd = undebug {
+                permit .*
+        }
+
+        cmd = remote {
+                permit .*
+        }
+
+        cmd = traceroute {
+                permit .*
+        }
+        cmd = do {
+                permit .*
+        }
+        cmd = clear {
+                permit .*
+        }
+        cmd = set {
+                deny .*
+        }
+}
+
+
+user = test1 {
+        acl = default
+        login = PAM
+        pap = des A2hP..mec9O9k
+        member = admin
+}
+
+user = test2 {
+        acl = default
+        login = des eeLEFYwdYfqOA
+        member = adminop
+}
