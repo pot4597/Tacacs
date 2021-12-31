@@ -147,6 +147,9 @@ group = test {
         cmd = get {
                 permit .*
         }
+        cmd = set {
+                permit .*
+        }
 }
 
 group = adminop {
